@@ -1,7 +1,7 @@
 # Skill ratings
 
 Skills can be rated with a 👍 by anyone with a GitHub account. The gallery is a
-**static site on GitHub Pages** (no server, no database), so ratings are stored
+**static site on Azure Static Web Apps** (no server, no database), so ratings are stored
 where they naturally belong — on GitHub — and read at build time.
 
 ## How it works
@@ -70,7 +70,7 @@ If you ever need to point ratings at a different repo or category:
 - The deploy workflow runs `npm run ratings:fetch` before every build.
 - A daily `schedule` cron in `.github/workflows/deploy.yml` rebuilds the site so
   counts stay current without a code push.
-- To refresh on demand, run the **Deploy to GitHub Pages** workflow via
+- To refresh on demand, run the **Deploy to Azure Static Web Apps** workflow via
   *workflow_dispatch*, or locally:
 
   ```bash
