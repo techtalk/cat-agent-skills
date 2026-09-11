@@ -23,8 +23,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment:
-      name: azure-static-web-apps
     outputs:
       should_deploy: ${{ steps.ratings.outputs.should_deploy }}
     steps:
@@ -110,12 +108,26 @@ jobs:
           git -C "$publish_dir" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git -C "$publish_dir" commit -m "chore: refresh Copilot Studio skill feed"
           git -C "$publish_dir" push origin "HEAD:refs/heads/$FEED_BRANCH"
-      - name: Deploy to Azure Static Web Apps
+      - name: Upload site artifact
         if: steps.ratings.outputs.should_deploy == 'true'
-        id: deployment
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-dist
+          path: dist
+  deploy:
+    needs: build
+    if: needs.build.outputs.should_deploy == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: azure-static-web-apps
+    steps:
+      - name: Download site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site-dist
+          path: dist
+      - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
-        env:
-          SITE_URL: ${{ vars.SITE_URL }}
         with:
           action: upload
           app_location: dist
