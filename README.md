@@ -148,7 +148,8 @@ Set these GitHub repository settings before enabling the deploy workflow:
 - **Secret:** `AZURE_STATIC_WEB_APPS_API_TOKEN` — your Azure Static Web Apps
   deployment token
 - **Variable:** `SITE_URL` — the site's public URL (used during the Astro build
-  for absolute URL generation)
+  for absolute URL generation; include the full path if the app is hosted under
+  a subpath
 
 Before each build, `deploy.yml` runs `npm run ratings:fetch` to snapshot 👍
 counts from GitHub Discussions, and a daily `schedule` cron refreshes them
