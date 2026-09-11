@@ -108,6 +108,12 @@ jobs:
           git -C "$publish_dir" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git -C "$publish_dir" commit -m "chore: refresh Copilot Studio skill feed"
           git -C "$publish_dir" push origin "HEAD:refs/heads/$FEED_BRANCH"
+      - name: Upload site artifact
+        if: steps.ratings.outputs.should_deploy == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-dist
+          path: dist
   deploy:
     needs: build
     if: needs.build.outputs.should_deploy == 'true'
@@ -116,8 +122,11 @@ jobs:
       name: azure-static-web-apps
       url: ${{ steps.deployment.outputs.static_web_app_url }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Download site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site-dist
+          path: dist
       - name: Deploy to Azure Static Web Apps
         id: deployment
         uses: Azure/static-web-apps-deploy@v1
