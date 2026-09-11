@@ -7,7 +7,7 @@ an infinitely scrolling, searchable, filterable grid of skills, each with its
 own detail page and downloads.
 
 Built with [Astro](https://astro.build/) + [Tailwind CSS](https://tailwindcss.com/),
-deployed as a static site to GitHub Pages.
+deployed as a static site to Azure Static Web Apps.
 
 ## ✨ Features
 
@@ -32,13 +32,10 @@ deployed as a static site to GitHub Pages.
 
 ```bash
 npm install
-npm run dev      # start the dev server (http://localhost:4321/cat-agent-skills)
+npm run dev      # start the dev server (http://localhost:4321/)
 npm run build    # production build into ./dist
 npm run preview  # preview the production build locally
 ```
-
-> The site is configured with a `base` path of `/cat-agent-skills`
-> for GitHub Pages, so local URLs include that prefix.
 
 ## 🧩 Adding a skill
 
@@ -143,9 +140,15 @@ scripts/           import-submissions + validate-skill + fetch-ratings
 
 Pull requests run `.github/workflows/ci.yml`, which builds the site (and thereby
 validates every skill against the content schema). Pushing to `main` triggers
-`.github/workflows/deploy.yml`, which builds and publishes the site to GitHub
-Pages at `https://microsoft.github.io/cat-agent-skills/`. Enable Pages in the
-repo settings with the **GitHub Actions** source.
+`.github/workflows/deploy.yml`, which builds and publishes the site to Azure
+Static Web Apps.
+
+Set these GitHub repository settings before enabling the deploy workflow:
+
+- **Secret:** `AZURE_STATIC_WEB_APPS_API_TOKEN` — your Azure Static Web Apps
+  deployment token
+- **Variable:** `SITE_URL` — the site's public URL (used during the Astro build
+  for absolute URL generation)
 
 Before each build, `deploy.yml` runs `npm run ratings:fetch` to snapshot 👍
 counts from GitHub Discussions, and a daily `schedule` cron refreshes them

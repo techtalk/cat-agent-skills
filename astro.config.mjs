@@ -2,10 +2,12 @@
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 
-// GitHub Pages deployment: served from /cat-agent-skills
+const site = process.env.SITE_URL ?? process.env.PUBLIC_SITE_URL;
+
+// Azure Static Web Apps serves the site from the domain root.
 export default defineConfig({
-  site: "https://microsoft.github.io",
-  base: "/cat-agent-skills",
+  ...(site ? { site } : {}),
+  base: "/",
   trailingSlash: "ignore",
   vite: {
     plugins: [tailwindcss()],
